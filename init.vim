@@ -18,6 +18,8 @@ set tabstop=4
 set expandtab
 set shiftwidth=4
 
+set clipboard=unnamedplus
+
 inoremap jk <esc>
 
 "augroup insertonenter
@@ -79,6 +81,15 @@ Plug 'Raimondi/delimitMate'
 " Convenient floating terminal window
 "Plug 'voldikss/vim-floaterm'
 
+" Vim-tree plugin
+Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
+Plug 'nvim-tree/nvim-tree.lua'
+
+Plug 'nvim-lualine/lualine.nvim'
+" If you want to have icons in your statusline choose one of these
+Plug 'kyazdani42/nvim-web-devicons'
+
+
 call plug#end()
 
 " Leader bind to space
@@ -90,7 +101,7 @@ let g:netrw_liststyle = 3 " tree instead of plain view
 let g:netrw_browse_split = 3 " vertical split window when Enter pressed on file
 
 " Automatically format frontend files with prettier after file save
-let g:prettier#autoformat = 1
+let g:prettier#autoformat = 0
 let g:prettier#autoformat_require_pragma = 0
 
 " Disable quickfix window for prettier
@@ -369,6 +380,7 @@ nnoremap H gT
 nnoremap L gt
 
 " Autosave plugin
+
 lua << EOF
 require("auto-save").setup({
         enabled = true,
@@ -394,8 +406,75 @@ require("auto-save").setup({
 EOF
 
 " Telescope fzf plugin
+
 lua << EOF
 require('telescope').load_extension('fzf')
+EOF
+
+lua << EOF
+-- disable netrw at the very start of your init.lua (strongly advised)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- set termguicolors to enable highlight groups
+vim.opt.termguicolors = true
+
+-- empty setup using defaults
+require("nvim-tree").setup()
+
+-- OR setup with some options
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
+EOF
+
+lua << EOF
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
 EOF
 
 " Fast component creating for React app
