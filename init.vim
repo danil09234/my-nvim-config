@@ -477,9 +477,6 @@ require('lualine').setup {
 }
 EOF
 
-" Fast component creating for React app
-command CreateComponent :terminal '/Users/alexeygoloburdin/code/lms/frontend/createcomponent.py'
-
 " White colors for LSP messages in code
 set termguicolors
 hi DiagnosticError guifg=White
