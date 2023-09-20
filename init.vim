@@ -21,6 +21,7 @@ set shiftwidth=4
 set clipboard=unnamedplus
 
 tnoremap <Esc> <C-\><C-n>
+nnoremap ,<space> :nohlsearch<CR>
 
 call plug#begin('~/.vim/plugged')
 
@@ -43,7 +44,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 
 -- empty setup using defaults
-require("nvim-tree").setup()
+-- require("nvim-tree").setup()
 
 -- OR setup with some options
 require("nvim-tree").setup({
@@ -60,7 +61,6 @@ require("nvim-tree").setup({
 })
 EOF
 
-
 call plug#begin('~/.vim/plugged')
 Plug 'neovim/nvim-lspconfig'
 call plug#end()
@@ -72,7 +72,6 @@ require'lspconfig'.rust_analyzer.setup{}
 EOF
 
 call plug#begin('~/.vim/plugged')
-
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -98,7 +97,7 @@ Plug 'hrsh7th/vim-vsnip'
 
 call plug#end()
 
-lua <<EOF
+lua << EOF
   -- Set up nvim-cmp.
   local cmp = require'cmp'
 
@@ -160,7 +159,6 @@ lua <<EOF
       { name = 'cmdline' }
     })
   })
-
 EOF
 
 call plug#begin('~/.vim/plugged')
