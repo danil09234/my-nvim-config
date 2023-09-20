@@ -33,6 +33,36 @@ Plug 'nvim-lualine/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
 Plug 'kyazdani42/nvim-web-devicons'
 
+
+Plug 'neovim/nvim-lspconfig'
+
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+
+" For vsnip users.
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+
+" For luasnip users.
+" Plug 'L3MON4D3/LuaSnip'
+" Plug 'saadparwaiz1/cmp_luasnip'
+
+" For ultisnips users.
+" Plug 'SirVer/ultisnips'
+" Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+
+" For snippy users.
+" Plug 'dcampos/nvim-snippy'
+" Plug 'dcampos/cmp-snippy'
+
+
+Plug 'crusoexia/vim-monokai'
+Plug 'morhetz/gruvbox'  " colorscheme gruvbox
+Plug 'mhartington/oceanic-next'  " colorscheme OceanicNext
+
 call plug#end()
 
 lua << EOF
@@ -61,43 +91,7 @@ require("nvim-tree").setup({
 })
 EOF
 
-call plug#begin('~/.vim/plugged')
-Plug 'neovim/nvim-lspconfig'
-call plug#end()
-
-lua << EOF
-require'lspconfig'.pyright.setup{}
-require'lspconfig'.ccls.setup{}
-require'lspconfig'.rust_analyzer.setup{}
-EOF
-
-call plug#begin('~/.vim/plugged')
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
-
-" For vsnip users.
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
-
-" For luasnip users.
-" Plug 'L3MON4D3/LuaSnip'
-" Plug 'saadparwaiz1/cmp_luasnip'
-
-" For ultisnips users.
-" Plug 'SirVer/ultisnips'
-" Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-
-" For snippy users.
-" Plug 'dcampos/nvim-snippy'
-" Plug 'dcampos/cmp-snippy'
-
-call plug#end()
-
-lua << EOF
+lua <<EOF
   -- Set up nvim-cmp.
   local cmp = require'cmp'
 
@@ -121,6 +115,19 @@ lua << EOF
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.abort(),
       ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      ["<Tab>"] = cmp.mapping(function(fallback)
+      -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
+      if cmp.visible() then
+        local entry = cmp.get_selected_entry()
+	if not entry then
+	  cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+	else
+	  cmp.confirm()
+	end
+      else
+        fallback()
+      end
+    end, {"i","s","c",}),
     }),
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
@@ -161,13 +168,11 @@ lua << EOF
   })
 EOF
 
-call plug#begin('~/.vim/plugged')
-
-Plug 'crusoexia/vim-monokai'
-Plug 'morhetz/gruvbox'  " colorscheme gruvbox
-Plug 'mhartington/oceanic-next'  " colorscheme OceanicNext
-
-call plug#end()
+lua << EOF
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.ccls.setup{}
+require'lspconfig'.rust_analyzer.setup{}
+EOF
 
 " colorscheme monokai
 " colorscheme gruvbox
